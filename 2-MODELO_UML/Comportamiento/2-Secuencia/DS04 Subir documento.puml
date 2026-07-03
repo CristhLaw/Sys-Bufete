@@ -1,0 +1,34 @@
+@startuml
+title DS04 - Subir Documento (Monolito por Capas)
+
+autonumber
+
+actor "Cliente / Abogado" as Usuario
+participant "DocumentoController" as Ctrl
+participant "DocumentoServiceImpl" as Svc
+participant "CloudinaryAdapter" as Adapter
+participant "Cloudinary" as Cloudinary
+participant "DocumentoRepository" as Repo
+database "PostgreSQL" as DB
+
+Usuario -> Ctrl : POST /api/documentos (caso, archivo)
+Ctrl -> Svc : subirDocumento(casoId, archivo)
+Svc -> Svc : Validar formato y tamaño (PDF/DOCX/JPG/PNG/MP4)
+
+alt formato no permitido
+    Svc --> Ctrl : Error - formato no válido
+    Ctrl --> Usuario : 400 Bad Request
+else formato válido
+    Svc -> Adapter : subirArchivo(nombre, contenido)
+    Adapter -> Cloudinary : upload(data, options)
+    Cloudinary --> Adapter : url del archivo
+    Adapter --> Svc : url
+    Svc -> Repo : guardarMetadatos(caso, url, tipo)
+    Repo -> DB : INSERT INTO documento (...)
+    DB --> Repo : documento persistido
+    Repo --> Svc : ok
+    Svc --> Ctrl : documento registrado
+    Ctrl --> Usuario : 201 Created
+end
+
+@enduml

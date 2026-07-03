@@ -1,0 +1,35 @@
+@startuml
+title Patrón Strategy - Módulo de Reportes (IURIS)
+
+interface IExportadorReporte {
+  + exportar(nombreReporte: String, datos: Map<String, Object>): String
+}
+
+class ExportadorPDF implements IExportadorReporte {
+  + exportar(nombreReporte: String, datos: Map<String, Object>): String
+}
+
+class ExportadorExcel implements IExportadorReporte {
+  + exportar(nombreReporte: String, datos: Map<String, Object>): String
+}
+
+class ReporteService {
+  - estrategia: IExportadorReporte
+  + setEstrategia(estrategia: IExportadorReporte): void
+  + generarReporte(nombreReporte: String, datos: Map<String, Object>): String
+}
+
+ReporteService o-- IExportadorReporte : usa >
+ExportadorPDF ..|> IExportadorReporte
+ExportadorExcel ..|> IExportadorReporte
+
+note right of ReporteService
+  ReporteService (ver CONTEXTO/03-Modulos.md)
+  delega la generación del archivo a la
+  estrategia de exportación seleccionada
+  en tiempo de ejecución, según el formato
+  solicitado por el usuario (PDF o Excel),
+  sin condicionales if/else acopladas.
+end note
+
+@enduml

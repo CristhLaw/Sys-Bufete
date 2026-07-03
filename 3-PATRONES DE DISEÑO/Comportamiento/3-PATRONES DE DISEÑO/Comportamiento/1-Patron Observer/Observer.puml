@@ -1,0 +1,47 @@
+@startuml
+title Patrón Observer - Módulo de Casos Legales (IURIS)
+
+interface IObservador {
+  + actualizar(evento: String, origen: Object): void
+}
+
+interface ISujeto {
+  + agregarObservador(observador: IObservador): void
+  + removerObservador(observador: IObservador): void
+  + notificarObservadores(evento: String): void
+}
+
+class CasoLegal implements ISujeto {
+  - observadores: List<IObservador>
+  - id: Long
+  - estado: String
+  + agregarObservador(observador: IObservador): void
+  + removerObservador(observador: IObservador): void
+  + notificarObservadores(evento: String): void
+  + cambiarEstado(nuevoEstado: String): void
+}
+
+class NotificacionObserver implements IObservador {
+  + actualizar(evento: String, origen: Object): void
+}
+
+class AuditoriaObserver implements IObservador {
+  + actualizar(evento: String, origen: Object): void
+}
+
+CasoLegal "1" o-- "0..*" IObservador : notifica >
+NotificacionObserver ..|> IObservador
+AuditoriaObserver ..|> IObservador
+CasoLegal ..|> ISujeto
+
+note right of CasoLegal
+  Los observadores (NotificacionObserver,
+  AuditoriaObserver) se registran por
+  inyección de dependencias al arrancar
+  la aplicación. Desacopla al módulo de
+  Casos Legales de los módulos de
+  Comunicación y Auditoría, sin necesidad
+  de llamadas directas entre ellos.
+end note
+
+@enduml

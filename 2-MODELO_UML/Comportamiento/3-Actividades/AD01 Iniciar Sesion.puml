@@ -1,0 +1,24 @@
+@startuml
+title AD01 - Actividades: Iniciar Sesión
+
+start
+:Accede a la pantalla de login;
+:Ingresa correo y contraseña;
+:Presiona "Iniciar Sesión";
+
+if (¿Usuario existe?) then (sí)
+  if (¿Contraseña correcta?) then (sí)
+    :Generar token JWT;
+    :Registrar acceso en auditoría;
+    :Redirigir al panel según el rol;
+    stop
+  else (no)
+    :Mostrar error de credenciales;
+    stop
+  endif
+else (no)
+  :Mostrar error de usuario no encontrado;
+  stop
+endif
+
+@enduml

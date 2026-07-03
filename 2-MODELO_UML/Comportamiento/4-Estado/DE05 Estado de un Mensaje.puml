@@ -1,0 +1,10 @@
+@startuml
+title Diagrama de Estados - Mensaje
+
+[*] --> Enviado : Usuario envía el mensaje
+Enviado --> Entregado : El destinatario recibe el mensaje
+Entregado --> Leido : El destinatario abre la conversación
+
+Leido --> [*]
+
+@enduml

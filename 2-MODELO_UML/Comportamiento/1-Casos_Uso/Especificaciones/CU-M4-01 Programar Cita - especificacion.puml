@@ -1,0 +1,29 @@
+@startjson
+{
+  "Caso de uso": "Programar Cita",
+  "Id": "CU-M4-01",
+  "Breve descripción": "Permite al cliente o a la secretaria programar una cita o audiencia con un abogado, validando su disponibilidad de horario.",
+  "Actores primarios": "Cliente, Secretaria",
+  "Actores secundarios": "AgendaController, AgendaServiceImpl, ComunicacionServiceImpl, AgendaRepository",
+  "Precondiciones": [
+    "El usuario ha iniciado sesión.",
+    "La cita se solicita con un mínimo de 24 horas de anticipación."
+  ],
+  "Flujo principal": {
+    "1": "El usuario selecciona abogado, fecha y hora deseada.",
+    "2": "El AgendaController delega la solicitud a AgendaServiceImpl.",
+    "3": "AgendaServiceImpl verifica que el abogado no tenga otra cita en ese horario.",
+    "4": "AgendaServiceImpl persiste la cita mediante AgendaRepository en estado 'Programada'.",
+    "5": "AgendaServiceImpl notifica al abogado y al cliente mediante ComunicacionServiceImpl.",
+    "6": "El sistema programa recordatorios automáticos a 48 y 24 horas antes de la cita."
+  },
+  "Postcondiciones": [
+    "La cita queda registrada en estado 'Programada'.",
+    "Ambos participantes reciben confirmación de la cita."
+  ],
+  "Flujos alternativos": {
+    "A1: Horario no disponible": "El sistema rechaza la solicitud y sugiere horarios alternativos.",
+    "A2: Anticipación insuficiente": "El sistema rechaza la solicitud si no cumple el mínimo de 24 horas de anticipación."
+  }
+}
+@endjson

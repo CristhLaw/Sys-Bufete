@@ -1,0 +1,27 @@
+@startjson
+{
+  "Caso de uso": "Generar Reporte de Casos",
+  "Id": "CU-M2-04",
+  "Breve descripción": "Permite al administrador o al gerente/socio generar un reporte con indicadores de casos activos, tasa de cumplimiento y carga de abogados.",
+  "Actores primarios": "Administrador, Gerente / Socio",
+  "Actores secundarios": "ReporteController, ReporteServiceImpl, CasoServiceImpl, ReporteRepository",
+  "Precondiciones": [
+    "El usuario ha iniciado sesión con un rol autorizado para consultar reportes."
+  ],
+  "Flujo principal": {
+    "1": "El usuario selecciona el tipo de reporte y el rango de fechas.",
+    "2": "El ReporteController delega la solicitud a ReporteServiceImpl.",
+    "3": "ReporteServiceImpl consulta directamente a CasoServiceImpl para recopilar los datos necesarios.",
+    "4": "ReporteServiceImpl consolida los indicadores mediante ReporteRepository.",
+    "5": "El sistema presenta el reporte solicitado.",
+    "6": "El usuario puede exportar el reporte en PDF o Excel (CU-M2-05)."
+  },
+  "Postcondiciones": [
+    "El reporte queda disponible para su visualización o descarga.",
+    "ReporteServiceImpl no modifica datos de negocio de otros módulos (solo lectura)."
+  ],
+  "Flujos alternativos": {
+    "A1: Sin datos en el rango seleccionado": "El sistema informa que no existen registros para el período consultado."
+  }
+}
+@endjson

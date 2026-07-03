@@ -1,0 +1,46 @@
+@startuml
+title Diagrama de Estados - Caso Legal (RN-09)
+
+[*] --> Activo : Abogado registra el caso
+
+state Activo {
+  Activo : entry / Se asigna abogado según\n  especialidad y carga (máx. 20 casos)
+}
+
+Activo --> EnAudiencia : Se programa una audiencia
+EnAudiencia --> EnEspera : La audiencia concluye,\nse espera resolución o documentación
+EnEspera --> EnAudiencia : Se programa una nueva audiencia
+EnEspera --> Activo : Se reanuda la gestión del caso
+Activo --> EnEspera : El caso queda a la espera\nde una actuación externa
+
+state EnAudiencia {
+  EnAudiencia : do / Registrar actuación procesal\n  (fecha, tipo, responsable)
+}
+
+state EnEspera {
+  EnEspera : do / Consulta de estado habilitada\n  para el cliente (solo lectura)
+}
+
+EnAudiencia --> Cerrado : Abogado registra resolución\ny cierra el caso
+EnEspera --> Cerrado : Abogado registra resolución\ny cierra el caso
+
+state Cerrado {
+  Cerrado : entry / Se notifica al cliente\n  el cierre del caso
+}
+
+Cerrado --> Archivado : Vencido el periodo\nde retención administrativa
+
+state Archivado {
+  Archivado : Solo lectura, conservado\n  para auditoría legal
+}
+
+Archivado --> [*]
+
+legend right
+|= Regla de negocio |= Descripción |
+| RN-09 | Ciclo de vida válido: Activo → En Audiencia → En Espera → Cerrado → Archivado |
+| RN-11 | Máximo 20 casos activos por abogado |
+| RN-12 | Toda actuación procesal exige fecha, tipo y responsable |
+endlegend
+
+@enduml

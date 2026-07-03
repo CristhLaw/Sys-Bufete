@@ -1,0 +1,26 @@
+@startjson
+{
+  "Caso de uso": "Asignar Abogado a Caso",
+  "Id": "CU-M2-02",
+  "Breve descripción": "Permite asignar un abogado a un caso registrado, considerando su especialidad y su carga de trabajo actual.",
+  "Actores primarios": "Secretaria, Administrador",
+  "Actores secundarios": "CasoController, CasoServiceImpl, AsignacionAbogadoServiceImpl, CasoRepository",
+  "Precondiciones": [
+    "El caso existe y se encuentra sin abogado asignado o en reasignación."
+  ],
+  "Flujo principal": {
+    "1": "El usuario selecciona el caso y el abogado a asignar.",
+    "2": "El CasoController delega la solicitud a CasoServiceImpl.",
+    "3": "CasoServiceImpl invoca a AsignacionAbogadoServiceImpl para validar especialidad y carga máxima (20 casos activos).",
+    "4": "CasoServiceImpl actualiza el caso con el abogado asignado mediante CasoRepository.",
+    "5": "El sistema confirma la asignación."
+  },
+  "Postcondiciones": [
+    "El caso queda vinculado al abogado asignado."
+  ],
+  "Flujos alternativos": {
+    "A1: Carga máxima superada": "AsignacionAbogadoServiceImpl rechaza la asignación y sugiere otro abogado disponible con la misma especialidad.",
+    "A2: Especialidad no coincide": "El sistema advierte que el abogado no tiene la especialidad requerida por el caso."
+  }
+}
+@endjson

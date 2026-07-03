@@ -1,0 +1,51 @@
+@startuml
+title C4 Nivel 2 - Contenedores del Sistema IURIS
+
+left to right direction
+
+actor "Cliente" as Cliente
+actor "Abogado Principal" as AbogadoPrincipal
+actor "Abogado Asistente" as AbogadoAsistente
+actor "Secretaria" as Secretaria
+actor "Administrador" as Administrador
+actor "Gerente / Socio" as Gerente
+
+package "Sistema IURIS" {
+
+    rectangle "Aplicación Web\nAngular" as WebApp
+
+    rectangle "Aplicación Móvil\nFlutter" as MobileApp
+
+    rectangle "Backend IURIS\nSpring Boot\nArquitectura Monolítica por Capas" as Backend
+
+    database "PostgreSQL\nBase de Datos Única" as DB
+}
+
+package "Servicios Externos" {
+
+    rectangle "Cloudinary\nAlmacenamiento de documentos" as Cloudinary
+
+    rectangle "WebRTC\nVideollamadas" as Video
+
+}
+
+Cliente --> MobileApp
+Cliente --> WebApp
+
+AbogadoPrincipal --> WebApp
+AbogadoAsistente --> WebApp
+Secretaria --> WebApp
+Administrador --> WebApp
+Gerente --> WebApp
+Gerente --> MobileApp
+
+WebApp --> Backend : REST API
+MobileApp --> Backend : REST API
+
+Backend --> DB : CRUD
+
+Backend --> Cloudinary : Gestiona documentos
+
+Backend --> Video : Gestiona videollamadas
+
+@enduml

@@ -1,0 +1,30 @@
+@startjson
+{
+  "Caso de uso": "Registrar Caso",
+  "Id": "CU-M2-01",
+  "Breve descripción": "Permite al abogado o a la secretaria registrar un nuevo caso legal para un cliente, asignando la especialidad correspondiente.",
+  "Actores primarios": "Abogado, Secretaria",
+  "Actores secundarios": "CasoController, CasoServiceImpl, CasoRepository",
+  "Precondiciones": [
+    "El usuario ha iniciado sesión con un rol autorizado.",
+    "El cliente para el que se crea el caso ya existe en el sistema."
+  ],
+  "Flujo principal": {
+    "1": "El usuario accede al módulo 'Nuevo Caso'.",
+    "2": "El usuario ingresa los datos del caso (cliente, especialidad, descripción).",
+    "3": "El CasoController recibe la solicitud y la delega a CasoServiceImpl.",
+    "4": "CasoServiceImpl valida los datos obligatorios del caso.",
+    "5": "CasoServiceImpl asigna el estado inicial 'Activo' al caso.",
+    "6": "CasoServiceImpl persiste el caso mediante CasoRepository.",
+    "7": "El sistema confirma el registro y habilita la asignación de abogado (CU-M2-02)."
+  },
+  "Postcondiciones": [
+    "El caso queda registrado en estado 'Activo'.",
+    "El caso queda disponible para consulta del cliente asociado."
+  ],
+  "Flujos alternativos": {
+    "A1: Datos incompletos": "El sistema muestra un mensaje de validación indicando los campos obligatorios faltantes.",
+    "A2: Cliente no existe": "El sistema solicita registrar primero al cliente antes de continuar."
+  }
+}
+@endjson

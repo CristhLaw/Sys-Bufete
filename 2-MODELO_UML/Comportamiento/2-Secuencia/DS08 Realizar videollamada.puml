@@ -1,0 +1,32 @@
+@startuml
+title DS08 - Realizar Videollamada (Monolito por Capas)
+
+autonumber
+
+actor "Abogado" as Abogado
+actor "Cliente" as Cliente
+participant "ComunicacionController" as Ctrl
+participant "ComunicacionServiceImpl" as Svc
+participant "ComunicacionRepository" as Repo
+database "PostgreSQL" as DB
+participant "Servicio de Videollamadas (WebRTC)" as Video
+
+Abogado -> Ctrl : POST /api/comunicacion/videollamadas (casoId)
+Ctrl -> Svc : crearSalaVideollamada(casoId)
+Svc -> Video : crearSala()
+Video --> Svc : código de sala
+Svc -> Repo : guardarVideollamada(sala, caso)
+Repo -> DB : INSERT INTO videollamada (...)
+DB --> Repo : ok
+Repo --> Svc : ok
+Svc --> Ctrl : sala creada
+Ctrl --> Abogado : 201 Created { codigoSala }
+
+Cliente -> Ctrl : GET /api/comunicacion/videollamadas/{codigoSala}
+Ctrl -> Svc : unirseASala(codigoSala)
+Svc -> Video : validarSala(codigoSala)
+Video --> Svc : sala válida
+Svc --> Ctrl : acceso concedido
+Ctrl --> Cliente : 200 OK { conexión establecida }
+
+@enduml

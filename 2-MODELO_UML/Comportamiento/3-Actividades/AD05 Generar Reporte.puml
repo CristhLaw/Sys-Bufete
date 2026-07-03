@@ -1,0 +1,20 @@
+@startuml
+title AD05 - Actividades: Generar Reporte de Casos
+
+start
+:Administrador/Gerente selecciona tipo de reporte y rango de fechas;
+:Consultar indicadores de casos (activos, cumplimiento, carga de abogados);
+
+if (¿Existen datos en el rango?) then (sí)
+  :Consolidar indicadores;
+  :Mostrar reporte en pantalla;
+  if (¿Solicita exportación?) then (sí)
+    :Exportar reporte en PDF o Excel;
+  endif
+  stop
+else (no)
+  :Informar que no hay registros en el período;
+  stop
+endif
+
+@enduml

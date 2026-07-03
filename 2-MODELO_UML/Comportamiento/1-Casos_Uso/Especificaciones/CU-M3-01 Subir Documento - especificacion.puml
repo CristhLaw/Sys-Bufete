@@ -1,0 +1,29 @@
+@startjson
+{
+  "Caso de uso": "Subir Documento",
+  "Id": "CU-M3-01",
+  "Breve descripción": "Permite a un cliente o abogado cargar un documento (PDF, DOCX, JPG, PNG o MP4) asociado a un caso.",
+  "Actores primarios": "Cliente, Abogado",
+  "Actores secundarios": "DocumentoController, DocumentoServiceImpl, CloudinaryAdapter, DocumentoRepository",
+  "Precondiciones": [
+    "El usuario ha iniciado sesión y tiene acceso al caso.",
+    "El archivo cumple con el formato y tamaño permitidos."
+  ],
+  "Flujo principal": {
+    "1": "El usuario selecciona el caso y el archivo a subir.",
+    "2": "El DocumentoController delega la solicitud a DocumentoServiceImpl.",
+    "3": "DocumentoServiceImpl valida formato y tamaño del archivo.",
+    "4": "DocumentoServiceImpl envía el archivo mediante CloudinaryAdapter para su almacenamiento físico.",
+    "5": "DocumentoServiceImpl guarda los metadatos (nombre, tipo, URL, caso vinculado) mediante DocumentoRepository.",
+    "6": "El sistema registra el acceso en el log de auditoría.",
+    "7": "El sistema confirma la carga exitosa al usuario."
+  },
+  "Postcondiciones": [
+    "El documento queda disponible para consulta dentro del caso."
+  ],
+  "Flujos alternativos": {
+    "A1: Formato no permitido": "El sistema rechaza el archivo e informa los formatos válidos.",
+    "A2: Falla en el almacenamiento externo": "El sistema informa el error y permite reintentar la carga sin duplicar metadatos."
+  }
+}
+@endjson

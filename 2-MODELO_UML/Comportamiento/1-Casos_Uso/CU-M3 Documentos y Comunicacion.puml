@@ -1,0 +1,42 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+title CU02 - Documentos y Comunicación
+
+actor "Cliente" as Cliente
+actor "Abogado" as Abogado
+actor "Secretaria" as Secretaria
+
+rectangle "Gestión de Documentos" {
+    usecase "Subir documento" as UC_SubirDocumento
+    usecase "Consultar documento" as UC_ConsultarDocumento
+    usecase "Descargar documento" as UC_DescargarDocumento
+}
+
+rectangle "Comunicación" {
+    usecase "Enviar mensaje" as UC_EnviarMensaje
+    usecase "Responder mensaje" as UC_ResponderMensaje
+    usecase "Realizar videollamada" as UC_Videollamada
+}
+
+UC_SubirDocumento .> UC_ConsultarDocumento : <<include>>
+UC_ConsultarDocumento .> UC_DescargarDocumento : <<include>>
+UC_EnviarMensaje .> UC_ResponderMensaje : <<extend>>
+
+Cliente --> UC_SubirDocumento
+Cliente --> UC_ConsultarDocumento
+Cliente --> UC_DescargarDocumento
+Cliente --> UC_EnviarMensaje
+Cliente --> UC_Videollamada
+
+Abogado --> UC_SubirDocumento
+Abogado --> UC_ConsultarDocumento
+Abogado --> UC_DescargarDocumento
+Abogado --> UC_EnviarMensaje
+Abogado --> UC_Videollamada
+
+Secretaria --> UC_ConsultarDocumento
+Secretaria --> UC_ResponderMensaje
+
+@enduml

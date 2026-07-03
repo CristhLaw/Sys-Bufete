@@ -1,0 +1,30 @@
+@startuml
+title C4 Nivel 1 - Contexto del Sistema IURIS
+
+left to right direction
+
+actor "Cliente" as Cliente
+actor "Abogado Principal" as AbogadoPrincipal
+actor "Abogado Asistente" as AbogadoAsistente
+actor "Secretaria" as Secretaria
+actor "Administrador" as Administrador
+actor "Gerente / Socio" as Gerente
+
+rectangle "Sistema IURIS\n[Sistema de software]\nGestión integral de casos legales,\nagenda, documentos, comunicación\ny reportes del bufete" as Sistema
+
+package "Sistemas Externos" {
+    rectangle "Cloudinary\n[Sistema externo]\nAlmacenamiento de documentos" as Cloudinary
+    rectangle "WebRTC\n[Sistema externo]\nVideollamadas" as Video
+}
+
+Cliente --> Sistema : Solicita consultas, agenda citas,\nconsulta el estado de sus casos
+AbogadoPrincipal --> Sistema : Gestiona casos, audiencias,\ndocumentos y comunicación con clientes
+AbogadoAsistente --> Sistema : Apoya en actuaciones procesales\ny elaboración de documentos
+Secretaria --> Sistema : Registra clientes y coordina\nagenda de citas y audiencias
+Administrador --> Sistema : Administra usuarios, roles,\npermisos y configuración
+Gerente --> Sistema : Consulta reportes ejecutivos\ny KPIs del bufete
+
+Sistema --> Cloudinary : Almacena / recupera documentos
+Sistema --> Video : Gestiona videollamadas
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+title Patrón Singleton - Configuración Global del Sistema (IURIS)
+
+class Singleton {
+  - static volatile instancia: Singleton
+  - nombreBufete: String
+  - limiteCasosPorAbogado: int
+  - Singleton()
+  + static getInstance(): Singleton
+  + getNombreBufete(): String
+  + getLimiteCasosPorAbogado(): int
+  + ejecutar(): void
+}
+
+note right of Singleton
+  Equivale a la entidad ConfiguracionSistema
+  del modelo de datos de IURIS: una única
+  instancia en memoria con los parámetros
+  globales del bufete (RN-11: límite de 20
+  casos por abogado, RN-16: plazos mínimos
+  de agenda, sede por defecto, etc.),
+  cargada una sola vez al arrancar la
+  aplicación monolítica.
+end note
+
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+title CU-M4 - Agenda y Audiencias
+
+actor "Cliente" as Cliente
+actor "Secretaria" as Secretaria
+actor "Abogado" as Abogado
+
+rectangle "Administración de Audiencias" {
+    usecase "Registrar audiencia" as UC_RegistrarAudiencia
+    usecase "Programar cita" as UC_ProgramarCita
+    usecase "Reprogramar cita" as UC_ReprogramarCita
+    usecase "Cancelar cita" as UC_CancelarCita
+    usecase "Actualizar estado del caso" as UC_ActualizarEstado
+}
+
+UC_RegistrarAudiencia .> UC_ProgramarCita : <<include>>
+UC_ReprogramarCita .> UC_ProgramarCita : <<include>>
+UC_CancelarCita .> UC_ProgramarCita : <<extend>>
+
+Cliente --> UC_RegistrarAudiencia
+Cliente --> UC_ReprogramarCita
+Cliente --> UC_CancelarCita
+
+Secretaria --> UC_RegistrarAudiencia
+Secretaria --> UC_ProgramarCita
+Secretaria --> UC_ReprogramarCita
+Secretaria --> UC_CancelarCita
+
+Abogado --> UC_ActualizarEstado
+Abogado --> UC_RegistrarAudiencia
+
+@enduml

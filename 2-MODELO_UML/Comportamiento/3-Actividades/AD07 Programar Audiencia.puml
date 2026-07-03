@@ -1,0 +1,22 @@
+@startuml
+title AD07 - Actividades: Programar Audiencia / Cita
+
+start
+:Cliente/Secretaria selecciona abogado, fecha y hora;
+
+if (¿Anticipación mínima de 24 horas?) then (sí)
+  if (¿Abogado disponible en ese horario?) then (sí)
+    :Registrar cita en estado "Programada";
+    :Notificar al abogado y al cliente;
+    :Programar recordatorios (48h y 24h antes);
+    stop
+  else (no)
+    :Sugerir horarios alternativos;
+    stop
+  endif
+else (no)
+  :Rechazar solicitud por anticipación insuficiente;
+  stop
+endif
+
+@enduml

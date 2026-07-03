@@ -1,0 +1,18 @@
+@startuml
+title AD04 - Actividades: Subir Documento
+
+start
+:Usuario selecciona caso y archivo;
+
+if (¿Formato y tamaño permitidos?) then (sí)
+  :Enviar archivo a Cloudinary (CloudinaryAdapter);
+  :Guardar metadatos del documento;
+  :Registrar acceso en auditoría;
+  :Confirmar carga exitosa;
+  stop
+else (no)
+  :Rechazar archivo e informar formatos válidos;
+  stop
+endif
+
+@enduml

@@ -1,0 +1,50 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+title CU-M2 - Casos y Reportes
+
+actor "Cliente" as Cliente
+actor "Secretaria" as Secretaria
+actor "Abogado" as Abogado
+actor "Administrador" as Administrador
+actor "Gerente / Socio" as Gerente
+
+rectangle "Módulo de Gestión de Casos" {
+    usecase "Solicitar consulta legal" as UC_SolicitarConsulta
+    usecase "Registrar caso" as UC_RegistrarCaso
+    usecase "Asignar abogado" as UC_AsignarAbogado
+    usecase "Actualizar estado del caso" as UC_ActualizarEstado
+    usecase "Cerrar caso" as UC_CerrarCaso
+    usecase "Ver estado del caso" as UC_VerEstado
+}
+
+rectangle "Módulo de Reportes" {
+    usecase "Generar reporte de casos" as UC_GenerarReporte
+    usecase "Exportar reporte" as UC_ExportarReporte
+}
+
+UC_SolicitarConsulta .> UC_RegistrarCaso : <<include>>
+UC_RegistrarCaso .> UC_AsignarAbogado : <<include>>
+UC_GenerarReporte .> UC_ExportarReporte : <<include>>
+UC_CerrarCaso .> UC_ActualizarEstado : <<extend>>
+
+Cliente --> UC_SolicitarConsulta
+Cliente --> UC_VerEstado
+
+Secretaria --> UC_RegistrarCaso
+Secretaria --> UC_AsignarAbogado
+
+Abogado --> UC_RegistrarCaso
+Abogado --> UC_AsignarAbogado
+Abogado --> UC_ActualizarEstado
+Abogado --> UC_CerrarCaso
+Abogado --> UC_VerEstado
+
+Administrador --> UC_AsignarAbogado
+Administrador --> UC_GenerarReporte
+Administrador --> UC_ExportarReporte
+
+Gerente --> UC_GenerarReporte
+Gerente --> UC_ExportarReporte
+@enduml

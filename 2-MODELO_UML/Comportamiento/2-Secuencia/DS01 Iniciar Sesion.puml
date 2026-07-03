@@ -1,0 +1,30 @@
+@startuml
+title DS01 - Iniciar Sesión (Monolito por Capas)
+
+autonumber
+
+actor "Usuario" as Usuario
+participant "AuthController" as Ctrl
+participant "AuthServiceImpl" as Svc
+participant "UsuarioRepository" as Repo
+database "PostgreSQL" as DB
+
+Usuario -> Ctrl : POST /api/auth/login (correo, password)
+Ctrl -> Svc : autenticar(correo, password)
+Svc -> Repo : buscarPorEmail(correo)
+Repo -> DB : SELECT * FROM usuario WHERE email = ?
+DB --> Repo : usuario
+Repo --> Svc : usuario
+
+Svc -> Svc : Validar hash de contraseña (BCrypt)
+
+alt credenciales inválidas
+    Svc --> Ctrl : Error - credenciales incorrectas
+    Ctrl --> Usuario : 401 Unauthorized
+else credenciales válidas
+    Svc -> Svc : Generar token JWT
+    Svc --> Ctrl : token JWT
+    Ctrl --> Usuario : 200 OK { token }
+end
+
+@enduml

@@ -1,0 +1,36 @@
+@startuml
+title DS06 - Actualizar Estado del Caso (Monolito por Capas)
+
+autonumber
+
+actor "Abogado" as Abogado
+participant "CasoController" as Ctrl
+participant "CasoServiceImpl" as Svc
+participant "CasoRepository" as Repo
+database "PostgreSQL" as DB
+participant "ComunicacionServiceImpl" as Comm
+
+Abogado -> Ctrl : PATCH /api/casos/{id}/estado
+Ctrl -> Svc : actualizarEstado(casoId, nuevoEstado)
+Svc -> Repo : buscarPorId(casoId)
+Repo -> DB : SELECT * FROM caso WHERE id = ?
+DB --> Repo : caso
+Repo --> Svc : caso
+
+Svc -> Svc : Validar transición\n(Activo → En Audiencia → En Espera → Cerrado → Archivado)
+
+alt transición no permitida
+    Svc --> Ctrl : 400 Bad Request
+    Ctrl --> Abogado : "Transición de estado no permitida"
+else transición válida
+    Svc -> Repo : actualizarEstado(caso, nuevoEstado)
+    Repo -> DB : UPDATE caso SET estado = ?
+    DB --> Repo : actualizado
+    Repo --> Svc : ok
+    Svc -> Comm : notificarCambioEstado(caso)
+    Comm --> Svc : ack
+    Svc --> Ctrl : estado actualizado
+    Ctrl --> Abogado : 200 OK
+end
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+title DS02 - Registrar Caso (Monolito por Capas)
+
+autonumber
+
+actor "Secretaria / Abogado" as Usuario
+participant "CasoController" as Ctrl
+participant "CasoServiceImpl" as Svc
+participant "CasoRepository" as Repo
+database "PostgreSQL" as DB
+participant "ComunicacionServiceImpl" as Comm
+
+Usuario -> Ctrl : POST /api/casos (cliente, especialidad, descripción)
+Ctrl -> Svc : registrarCaso(datosCaso)
+Svc -> Svc : Validar datos obligatorios
+Svc -> Repo : guardar(caso, estado="Activo")
+Repo -> DB : INSERT INTO caso (...)
+DB --> Repo : caso persistido
+Repo --> Svc : caso creado
+Svc -> Comm : notificarCasoRegistrado(caso)
+Comm --> Svc : ack
+Svc --> Ctrl : caso creado
+Ctrl --> Usuario : 201 Created
+
+@enduml

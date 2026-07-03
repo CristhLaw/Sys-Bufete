@@ -1,0 +1,38 @@
+@startuml
+title DS07 - Programar Audiencia / Cita (Monolito por Capas)
+
+autonumber
+
+actor "Secretaria / Cliente" as Usuario
+participant "AgendaController" as Ctrl
+participant "AgendaServiceImpl" as Svc
+participant "DisponibilidadValidator" as Disp
+participant "AgendaRepository" as Repo
+database "PostgreSQL" as DB
+participant "ComunicacionServiceImpl" as Comm
+
+Usuario -> Ctrl : POST /api/agenda (abogado, fecha, hora)
+Ctrl -> Svc : programarCita(datosCita)
+Svc -> Disp : validarDisponibilidad(abogadoId, fecha, hora)
+Disp -> Repo : buscarCitasEnHorario(abogadoId, fecha, hora)
+Repo -> DB : SELECT * FROM audiencia WHERE abogado_id=? AND fecha=?
+DB --> Repo : citas existentes
+Repo --> Disp : lista de citas
+
+alt horario no disponible
+    Disp --> Svc : Error - horario ocupado
+    Svc --> Ctrl : 409 Conflict
+    Ctrl --> Usuario : "Horario no disponible"
+else horario disponible
+    Disp --> Svc : disponibilidad OK
+    Svc -> Repo : guardar(cita, estado="Programada")
+    Repo -> DB : INSERT INTO audiencia (...)
+    DB --> Repo : cita persistida
+    Repo --> Svc : ok
+    Svc -> Comm : notificarProgramacion(cita)
+    Comm --> Svc : ack
+    Svc --> Ctrl : cita confirmada
+    Ctrl --> Usuario : 201 Created
+end
+
+@enduml

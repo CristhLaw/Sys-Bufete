@@ -1,0 +1,49 @@
+@startuml
+title C4 Nivel 3 - Componentes del Backend IURIS
+
+left to right direction
+
+package "Backend IURIS\n(Spring Boot - Arquitectura Monolítica por Capas)" {
+
+    component "Controllers\n(API REST)" as Controllers
+
+    component "Servicios\n(Lógica de Negocio)" as Services
+
+    component "Repositorios\n(Spring Data JPA)" as Repository
+
+    component "Entidades\n(Modelo de Dominio)" as Model
+
+    component "Seguridad\n(Spring Security + JWT)" as Security
+
+    component "Configuración\n(CORS, Beans, OpenAPI)" as Config
+
+    component "DTOs y Mappers" as DTO
+
+}
+
+database "PostgreSQL" as DB
+
+rectangle "Cloudinary" as Cloudinary
+rectangle "WebRTC" as Video
+
+Controllers --> Security : Autenticación / Autorización
+
+Controllers --> DTO : Solicita datos
+
+DTO --> Services : Convierte información
+
+Services --> Repository : Consulta / Persistencia
+
+Repository --> Model : Gestiona entidades
+
+Repository --> DB : CRUD
+
+Services --> Cloudinary : Documentos
+
+Services --> Video : Videollamadas
+
+Config ..> Controllers
+Config ..> Services
+Config ..> Repository
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+title AD06 - Actividades: Actualizar Estado del Caso
+
+start
+:Abogado selecciona caso y nuevo estado;
+
+if (¿Transición válida\n(Activo→En Audiencia→En Espera→Cerrado→Archivado)?) then (sí)
+  if (¿Nuevo estado es "Cerrado"?) then (sí)
+    if (¿Existe resolución registrada?) then (sí)
+      :Actualizar estado del caso;
+    else (no)
+      :Solicitar registro de resolución;
+      stop
+    endif
+  else (no)
+    :Actualizar estado del caso;
+  endif
+  :Notificar cambio de estado al cliente;
+  stop
+else (no)
+  :Rechazar transición no permitida;
+  stop
+endif
+
+@enduml

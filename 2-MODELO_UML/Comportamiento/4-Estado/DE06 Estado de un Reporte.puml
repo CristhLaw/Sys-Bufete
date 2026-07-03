@@ -1,0 +1,11 @@
+@startuml
+title Diagrama de Estados - Reporte
+
+[*] --> Solicitado : Usuario solicita el reporte
+Solicitado --> Generado : ReporteServiceImpl consolida los indicadores
+Generado --> Exportado : Usuario exporta el reporte (PDF/Excel)
+
+Generado --> [*]
+Exportado --> [*]
+
+@enduml

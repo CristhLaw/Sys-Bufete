@@ -1,0 +1,27 @@
+@startjson
+{
+  "Caso de uso": "Enviar Mensaje",
+  "Id": "CU-M3-02",
+  "Breve descripción": "Permite el intercambio de mensajes entre un cliente y su abogado asignado dentro del contexto de un caso.",
+  "Actores primarios": "Cliente, Abogado",
+  "Actores secundarios": "ComunicacionController, ComunicacionServiceImpl, ComunicacionRepository",
+  "Precondiciones": [
+    "El usuario ha iniciado sesión.",
+    "Existe un caso que vincula al cliente con el abogado."
+  ],
+  "Flujo principal": {
+    "1": "El usuario abre la conversación asociada al caso.",
+    "2": "El usuario redacta y envía un mensaje.",
+    "3": "El ComunicacionController delega el mensaje a ComunicacionServiceImpl.",
+    "4": "ComunicacionServiceImpl persiste el mensaje mediante ComunicacionRepository.",
+    "5": "ComunicacionServiceImpl notifica al destinatario mediante una notificación in-app.",
+    "6": "El sistema muestra el mensaje en la conversación de ambos participantes."
+  },
+  "Postcondiciones": [
+    "El mensaje queda almacenado en el historial de la conversación del caso."
+  ],
+  "Flujos alternativos": {
+    "A1: Usuario sin acceso al caso": "El sistema rechaza el envío indicando que el usuario no forma parte de la conversación."
+  }
+}
+@endjson

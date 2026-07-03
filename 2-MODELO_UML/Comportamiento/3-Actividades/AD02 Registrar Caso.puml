@@ -1,0 +1,18 @@
+@startuml
+title AD02 - Actividades: Registrar Caso
+
+start
+:Abogado/Secretaria accede a "Nuevo Caso";
+:Ingresa datos del cliente, especialidad y descripción;
+
+if (¿Datos completos?) then (sí)
+  :Registrar caso en estado "Activo";
+  :Notificar registro al cliente;
+  :Confirmar creación del caso;
+  stop
+else (no)
+  :Mostrar campos obligatorios faltantes;
+  stop
+endif
+
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+title Patrón Adapter - Módulo de Documentos (IURIS)
+
+interface IAlmacenamientoAdapter {
+  + subirArchivo(nombreArchivo: String, contenido: byte[]): String
+  + eliminarArchivo(urlArchivo: String): boolean
+}
+
+class CloudinaryClienteExterno {
+  + upload(data: byte[], options: Map): Map
+  + destroy(publicId: String): Map
+}
+
+class CloudinaryAdapter implements IAlmacenamientoAdapter {
+  - cloudinary: CloudinaryClienteExterno
+  + subirArchivo(nombreArchivo: String, contenido: byte[]): String
+  + eliminarArchivo(urlArchivo: String): boolean
+}
+
+class DocumentoService {
+  - almacenamiento: IAlmacenamientoAdapter
+  + cargarDocumento(nombreArchivo: String, contenido: byte[]): String
+}
+
+DocumentoService o-- IAlmacenamientoAdapter : usa >
+CloudinaryAdapter ..|> IAlmacenamientoAdapter
+CloudinaryAdapter -- CloudinaryClienteExterno : adapta >
+
+note right of CloudinaryAdapter
+  Traduce la interfaz propia del SDK de
+  Cloudinary (upload/destroy, con Maps
+  genéricos) a la interfaz que espera
+  DocumentoService (subirArchivo/
+  eliminarArchivo). Ver RN-18, RN-19.
+  Si se cambia de proveedor (ej. AWS S3),
+  solo se reemplaza este Adapter.
+end note
+
+@enduml

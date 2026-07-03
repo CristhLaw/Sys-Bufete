@@ -1,0 +1,14 @@
+@startuml
+title Diagrama de Estados - Audiencia
+
+[*] --> Programada : Se agenda la audiencia
+Programada --> EnCurso : Llega la fecha y hora programada
+Programada --> Suspendida : Se posterga por causa justificada
+Suspendida --> Programada : Se reprograma la audiencia
+EnCurso --> Concluida : Finaliza la audiencia
+Programada --> Cancelada : Se cancela antes de su realización
+
+Concluida --> [*]
+Cancelada --> [*]
+
+@enduml

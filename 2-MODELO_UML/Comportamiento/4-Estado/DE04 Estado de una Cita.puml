@@ -1,0 +1,16 @@
+@startuml
+title Diagrama de Estados - Cita
+
+[*] --> Programada : Cliente/Secretaria agenda la cita
+Programada --> Confirmada : Abogado confirma disponibilidad
+Programada --> Reprogramada : Se reprograma la cita
+Reprogramada --> Confirmada
+Confirmada --> EnCurso : Llega la fecha y hora programada
+EnCurso --> Completada : Finaliza la cita
+Programada --> Cancelada : Se cancela antes de su realización
+Confirmada --> Cancelada : Se cancela antes de su realización
+
+Completada --> [*]
+Cancelada --> [*]
+
+@enduml

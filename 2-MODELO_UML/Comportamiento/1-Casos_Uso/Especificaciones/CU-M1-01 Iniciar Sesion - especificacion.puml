@@ -1,0 +1,38 @@
+@startjson
+{
+  "Caso de uso": "Iniciar Sesión",
+  "Id": "CU-01",
+  "Breve descripción": "El sistema permite a los usuarios autenticarse mediante sus credenciales para acceder a las funcionalidades correspondientes según el rol asignado dentro del sistema IURIS.",
+  "Actores primarios": "Cliente, Abogado Principal, Abogado Asistente, Secretaria, Administrador, Gerente / Socio",
+  "Actores secundarios": "Base de Datos",
+  "Precondiciones": [
+    "El usuario se encuentra registrado en el sistema.",
+    "La cuenta del usuario está activa.",
+    "El usuario dispone de credenciales válidas.",
+    "El sistema se encuentra disponible."
+  ],
+  "Flujo principal": {
+    "1": "El usuario accede a la pantalla de inicio de sesión.",
+    "2": "El sistema solicita el nombre de usuario o correo electrónico y la contraseña.",
+    "3": "El usuario ingresa sus credenciales.",
+    "4": "El sistema valida que los campos obligatorios hayan sido completados.",
+    "5": "El sistema verifica las credenciales en la base de datos.",
+    "6": "El sistema comprueba que la cuenta se encuentre activa.",
+    "7": "El sistema identifica el rol del usuario.",
+    "8": "El sistema crea la sesión del usuario.",
+    "9": "El sistema redirecciona al panel principal correspondiente al rol del usuario.",
+    "10": "El sistema registra el acceso en el historial de auditoría."
+  },
+  "Postcondiciones": [
+    "La sesión del usuario queda iniciada correctamente.",
+    "El usuario accede al módulo principal según su rol.",
+    "El acceso queda registrado en el historial del sistema."
+  ],
+  "Flujos alternativos": {
+    "A1: Credenciales incorrectas": "El sistema informa que el usuario o la contraseña son incorrectos y solicita un nuevo intento.",
+    "A2: Cuenta inactiva": "El sistema informa que la cuenta se encuentra inactiva y deniega el acceso.",
+    "A3: Campos vacíos": "El sistema solicita completar los campos obligatorios antes de continuar.",
+    "A4: Error de conexión": "Si ocurre un problema de conexión con la base de datos, el sistema muestra un mensaje de error temporal e impide el inicio de sesión."
+  }
+}
+@endjson

@@ -1,0 +1,54 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+title DCU-01 - Casos de Uso de Autenticación
+
+actor "Cliente" as Cliente
+actor "Abogado Principal" as AbogadoPrincipal
+actor "Abogado Asistente" as AbogadoAsistente
+actor "Secretaria" as Secretaria
+actor "Administrador" as Administrador
+actor "Gerente / Socio" as Gerente
+
+rectangle "Módulo de Autenticación" {
+
+    usecase "Iniciar Sesión" as UC_Login
+    usecase "Recuperar Contraseña" as UC_Recuperar
+    usecase "Restablecer Contraseña" as UC_Reset
+    usecase "Cerrar Sesión" as UC_Logout
+    usecase "Validar Credenciales" as UC_Validar
+    usecase "Enviar Correo de Recuperación" as UC_Correo
+
+    UC_Login .> UC_Validar : <<include>>
+
+    UC_Recuperar .> UC_Correo : <<include>>
+
+    UC_Reset .> UC_Validar : <<include>>
+}
+
+Cliente --> UC_Login
+Cliente --> UC_Recuperar
+Cliente --> UC_Logout
+
+AbogadoPrincipal --> UC_Login
+AbogadoPrincipal --> UC_Logout
+AbogadoPrincipal --> UC_Recuperar
+
+AbogadoAsistente --> UC_Login
+AbogadoAsistente --> UC_Logout
+AbogadoAsistente --> UC_Recuperar
+
+Secretaria --> UC_Login
+Secretaria --> UC_Logout
+Secretaria --> UC_Recuperar
+
+Administrador --> UC_Login
+Administrador --> UC_Logout
+Administrador --> UC_Recuperar
+
+Gerente --> UC_Login
+Gerente --> UC_Logout
+Gerente --> UC_Recuperar
+
+@enduml

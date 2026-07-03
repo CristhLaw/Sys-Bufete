@@ -1,0 +1,14 @@
+@startuml
+title Diagrama de Estados - Documento
+
+[*] --> Borrador : Se carga el archivo al caso
+Borrador --> Publicado : Queda disponible para consulta del caso
+Publicado --> Firmado : Se registra firma / validación legal
+Publicado --> Archivado : Se archiva tras el cierre del caso
+Firmado --> Archivado : Se archiva tras el cierre del caso
+Publicado --> Eliminado : Se elimina por el usuario autorizado
+
+Archivado --> [*]
+Eliminado --> [*]
+
+@enduml

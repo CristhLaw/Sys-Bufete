@@ -1,0 +1,32 @@
+@startuml
+title DS05 - Generar Reporte de Casos (Monolito por Capas)
+
+autonumber
+
+actor "Administrador / Gerente" as Usuario
+participant "ReporteController" as Ctrl
+participant "ReporteServiceImpl" as Svc
+participant "CasoServiceImpl" as CasoSvc
+participant "ReporteRepository" as Repo
+database "PostgreSQL" as DB
+
+Usuario -> Ctrl : GET /api/reportes/casos?desde=&hasta=
+Ctrl -> Svc : generarReporteCasos(rango)
+Svc -> CasoSvc : obtenerIndicadoresCasos(rango)
+CasoSvc -> DB : SELECT ... FROM caso WHERE ...
+DB --> CasoSvc : datos de casos
+CasoSvc --> Svc : indicadores (activos, tasa cumplimiento, carga)
+Svc -> Repo : guardarSnapshot(reporte)
+Repo -> DB : INSERT INTO reporte_kpi (...)
+DB --> Repo : ok
+Repo --> Svc : ok
+Svc --> Ctrl : reporte generado
+Ctrl --> Usuario : 200 OK { reporte }
+
+note over Svc
+  ReporteServiceImpl solo consulta
+  (no crea, actualiza ni elimina
+  datos de negocio de otros módulos).
+end note
+
+@enduml

@@ -1,0 +1,29 @@
+@startjson
+{
+  "Caso de uso": "Actualizar Estado del Caso",
+  "Id": "CU-M2-03",
+  "Breve descripción": "Permite al abogado responsable transicionar el estado de un caso legal siguiendo el ciclo de vida definido: Activo → En Audiencia → En Espera → Cerrado → Archivado.",
+  "Actores primarios": "Abogado",
+  "Actores secundarios": "CasoController, CasoServiceImpl, ComunicacionServiceImpl, CasoRepository",
+  "Precondiciones": [
+    "El caso existe y está asignado al abogado que realiza la solicitud.",
+    "El estado actual del caso permite una transición válida."
+  ],
+  "Flujo principal": {
+    "1": "El abogado selecciona el caso y el nuevo estado deseado.",
+    "2": "El CasoController delega la solicitud a CasoServiceImpl.",
+    "3": "CasoServiceImpl valida que la transición sea válida según el ciclo de vida del caso.",
+    "4": "CasoServiceImpl actualiza el estado mediante CasoRepository.",
+    "5": "CasoServiceImpl notifica el cambio mediante ComunicacionServiceImpl (patrón Observer).",
+    "6": "El sistema confirma la actualización al abogado."
+  },
+  "Postcondiciones": [
+    "El caso queda con el nuevo estado persistido.",
+    "El cliente asociado recibe una notificación del cambio de estado."
+  ],
+  "Flujos alternativos": {
+    "A1: Transición inválida": "El sistema rechaza el cambio e informa la transición no permitida.",
+    "A2: Cierre sin resolución": "Si el nuevo estado es 'Cerrado' y no existe una resolución registrada, el sistema exige registrarla previamente."
+  }
+}
+@endjson

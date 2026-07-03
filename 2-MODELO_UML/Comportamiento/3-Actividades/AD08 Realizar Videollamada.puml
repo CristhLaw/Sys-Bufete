@@ -1,0 +1,20 @@
+@startuml
+title AD08 - Actividades: Realizar Videollamada
+
+start
+:Abogado solicita crear sala de videollamada para un caso;
+:Crear sala mediante el servicio de videollamadas (WebRTC);
+:Registrar videollamada asociada al caso;
+:Compartir código de sala con el cliente;
+
+:Cliente ingresa al enlace de la videollamada;
+
+if (¿Sala válida?) then (sí)
+  :Establecer conexión entre ambos participantes;
+  stop
+else (no)
+  :Mostrar error de sala no encontrada;
+  stop
+endif
+
+@enduml

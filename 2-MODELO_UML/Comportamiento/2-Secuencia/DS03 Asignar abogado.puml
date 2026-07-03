@@ -1,0 +1,38 @@
+@startuml
+title DS03 - Asignar Abogado a Caso (Monolito por Capas)
+
+autonumber
+
+actor "Secretaria" as Secretaria
+participant "CasoController" as Ctrl
+participant "CasoServiceImpl" as Svc
+participant "AsignacionAbogadoServiceImpl" as Asig
+participant "CasoRepository" as Repo
+database "PostgreSQL" as DB
+participant "ComunicacionServiceImpl" as Comm
+
+Secretaria -> Ctrl : PATCH /api/casos/{id}/abogado
+Ctrl -> Svc : asignarAbogado(casoId, abogadoId)
+Svc -> Asig : validarCargaYEspecialidad(abogadoId, casoId)
+Asig -> Repo : contarCasosActivos(abogadoId)
+Repo -> DB : SELECT COUNT(*) FROM caso WHERE abogado_id=? AND estado='ACTIVO'
+DB --> Repo : total
+Repo --> Asig : total
+
+alt carga máxima superada (20 casos)
+    Asig --> Svc : Error - carga máxima
+    Svc --> Ctrl : 409 Conflict
+    Ctrl --> Secretaria : "Abogado con carga máxima"
+else validación OK
+    Asig --> Svc : validación OK
+    Svc -> Repo : actualizarAbogado(caso, abogadoId)
+    Repo -> DB : UPDATE caso SET abogado_id = ?
+    DB --> Repo : actualizado
+    Repo --> Svc : ok
+    Svc -> Comm : notificarAsignacion(abogadoId, caso)
+    Comm --> Svc : ack
+    Svc --> Ctrl : asignación confirmada
+    Ctrl --> Secretaria : 200 OK
+end
+
+@enduml

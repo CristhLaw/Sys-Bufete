@@ -1,0 +1,17 @@
+@startuml
+title AD03 - Actividades: Asignar Abogado a Caso
+
+start
+:Secretaria selecciona caso y abogado;
+:Validar especialidad del abogado;
+
+if (¿Carga menor a 20 casos activos?) then (sí)
+  :Asignar abogado al caso;
+  :Notificar asignación al abogado;
+  stop
+else (no)
+  :Sugerir abogado alternativo con la misma especialidad;
+  stop
+endif
+
+@enduml
