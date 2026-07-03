@@ -1,16 +1,6 @@
-# Diagramas de Casos de Uso — Sistema IURIS
+# 📌 Casos de Uso
 
-Los casos de uso del sistema se organizan en un diagrama general y cuatro
-diagramas de módulo, agrupados por dominio funcional para mantener cada
-diagrama legible:
+## Diagrama General
 
-| Archivo | Alcance |
-|---|---|
-| `CU00 Casos de Uso Principales.puml` | Vista general de alto nivel de todos los módulos |
-| `CU-M1 Autenticacion y Perfil.puml` | Iniciar/cerrar sesión, recuperar y restablecer contraseña |
-| `CU-M2 Casos y Reportes.puml` | Solicitar consulta, registrar caso, asignar abogado, actualizar/cerrar caso, reportes |
-| `CU-M3 Documentos y Comunicacion.puml` | Subir/consultar/descargar documento, mensajería, videollamada |
-| `CU-M4 Agenda y Audiencias.puml` | Registrar audiencia, programar/reprogramar/cancelar cita |
-
-Las especificaciones detalladas de los casos de uso más representativos de
-cada módulo se encuentran en la carpeta `Especificaciones/`.
+![Diagrama General](https://www.plantuml.com/plantuml/png/ZLVTRjis6Bqtu7SWl8jUfQZaE8w7BgWYgvc1r36akFTVgCyA4PeqI6fTDlIHTZ7i4V9Y0_LhKr9T1p3WmyEFty_HeV996r0ct_FnQ3pYk3F4IA9Ozcn8oXHImwImI_g5YGCes9Cde2-Pahb8Gycb8j-UcS5ZmW7e2sIOc5UEn8O0aV4JXdw6L7vZ8YCxu1fFu-SQAMWaVuz7jyvHlqJNdsVHOZowbIf5LO5-D5zE_V7e-saSe4Qg8iensRkTHVw7YbnIGivGs1BAdvFWIMQGIh9HJ51s03uXe4c5rgmWtJF1j56GIcLZDOMIIR9A7gCl0LbjurL2BiYNrNf5RhUVeyU8B2CIt3xS1Sk7P6AJitzLmyWao0qAmoXGzlQV8AzaWsh7U4KaX3JDcSIO5QShZKLwsz1p62l1A0D54jGsMiNoEt5eVa05YeHI60KQt_w5YZjrk7UehHn0DNaLj4kRtFUJGWgcBI554eAMkg-4H796cIcFrZatGEunWphipA672a6HwCy3fiMyAjgLGmkeoO6plonN6pl757cHHBLXxcpuYaFCwnxcxqmRgHZmez8Ayc9eGAJ8g9peHacAkYdH-p2uAKOjUKwF9kUv0mvH5NDh4_Ry7uzYAMc-Hs46vf4_CTLowfYk2fQeAQWCUgYNxYpoj9XlG2bggGcSP53kcPrH3pEWoIkneL1G1hsf1ncArFQ2cLgydYkC60zAPWhs3i_LGmY28dT8hXJQH-4uiPAx-7556yZw-nzZfLlBg1zNLo4T3LRXIhRNFJgK-rpKbj9tRFWCflR0YyhbwdYkMxIFx5UMekGSzf3MJV9TfSH8cPNKMXgsArAG0fjSUsoZDLLQTOkJX6c3U-ZBl1t2LkUWMDi7rpjQPbLemtHLSZJOiXKDqzL9oumbRmCEAsM3QizQm_1TnsYPaJuWPS1P2YdgqXMR4wQk9Dfz2QOjhMCNKknObblBQ7fQCjqftw4eReJ25T_-qVP6Qi9sBuMI7ED1AeFww6Oqx8-cscaxxkBhtM-3d_7e7GdlLz7wCJh36u-gSPABYvlo2Zm5V1UOki1bDyhC1QvTOD5pT2UornFQcfA3p3l8TNUVjG47yNfOdNBzJbRbOtUc-zKRojdkrszAJRDFWSikvye5vYvWxqG7yJg8turi1-0WFUUNvkpatKdSxyJwkROjxPjUyXW7ouVuVFEEto3hz6P3AzRIUl6h0Nm-W5yFu8j-tBfDB-uDuFu0FXt0VwQnSNGVXAk7TPIGrJgytoxF6uCL2Nd_ljGF-PLy_CW4vNcADpVLyhHUdhdBLZg3Y-FH9nHfyG_J_m00)
+---
