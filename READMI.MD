@@ -136,26 +136,11 @@ Organizados en un diagrama general (`CU00`) y cuatro diagramas por módulo funci
 
 # 📊 Diagrama de Clases
 
-Modelo de dominio completo con las entidades `Cliente`, `Abogado`, `Administrador`, `Caso`, `Expediente`, `Audiencia`, `Cita`, `Documento`, `Resolución`, `ActuaciónProcesal`, `Pago`, `Mensaje`, `Conversación`, `Notificación`, `Videollamada`, `Rol`, `Permiso`, `Sede`, `EspecialidadLegal`, `AccesoDocumento`, `Auditoría`, `ConfiguraciónSistema`, junto con sus enumeraciones asociadas (`EstadoCaso`, `EstadoCita`, `EstadoDocumento`, `EstadoAudiencia`, `EstadoPago`, `RolUsuario`, `TipoDocumento`, `TipoMensaje`, `TipoNotificacion`, `TipoActuacion`).
 
+![Diagrama General](https://www.plantuml.com/plantuml/png/ZLZTRjiu5hxFKn3P6tUs2UfasdI3GJ6AB2S273kmdLpiJN4i7IkSKgH0KkbETkU1zcAlzX7wOaFIj49J2Z95aKZdvpl_XrH-LHgaRcjsfBvHte24cfGD9V_u512uA55XGyu_14G9_9ibVlnm5EhY5bgcfuBhETH8Rf0zeQO513Bg4KhndVAAR84f33WRABvLKhIyJ0KJalnjwlu54WsKfTKy2sXEeH2IeoIXsucKullwaHRVE2f5ngSzfhSolXfFpyvZfetXJO4LVKOoFaX1mS1O-_SH8LT2bYWznld5pnS_Jpjgu9UXzMqPMWU_brZftncIZM2b8IHQIxffDLfEP2DW1Zx-qVFobr_kLGkI2lNboyxZk03Pv-buUXN7Ciu-9gP3XW1dM05x5IsPVihI6EqikvWOhuVGahQaMaWAho5E9zbLbiM8oVdPf_FFXuZ8sxfVbKyVBYQVhmQHFqulfWv3KysGhAZIM0F9xvVvYfoG2OLAWY6KI5862XKPtJxSlJiwQWmKL4YECsCI9HHKS5J7phZpOYcOpxkZ4PBEyco-pjnpShMuJYQBtVFaDf_dg_NI49Q6Ofpn49dIK8eKr1uYITVvmquhctzDxYS6CSsJFI5RtMNBtLkQBPUTWMLwap_Ojn1yJHkH5Bfrddly276LBlFr3cE-MEVJF4tIV35tX4a-owzVP9VPQZ6xxxYBzN8n50hLu4tTBHVNo-GscNX_5_DfllIl5YwPvV_icCaypMRsBOHC2kjvrppxB1lLpetRnUJGwsoMcsHtxzRiwdwstfcPBQxp-SlJrsaoc-K-Qty45T-F4_cThB1g9IsXj8KtWh1HMaAX_NxmagGtWiJq5Yt99Pa9NlbtBkgDH6M8AorfHuO66QEbw36m1ifYOcFCVXUol07r6FCqCjmABcAw50OcwDUzuKBJ9ojy9GH3uA7P1vHqImie-_mj5e-GIdHzvI8iW4r0uvhMw6LQfcajJ05HYM6H4_VhxmHQZLmRItBa3EzTVzz5kgUy2nsngWNK6mhopikDm3Px0C1RV890-qdGqglkHEcpqKQvfMnKWXRgaYmsls6X3sKhr7DNkLJK3KCjHk_seBvTVJEaZ2BNEDmC9QTnMKegqRLul_2DH0K1ESoO4emML8DC1LScqJ0gKHMIDXOg2DUk5Q_oXFAMAajGrlaPLTfpe49U6YXgO5nXesAzDnqlAYX5NbgE0xR2Xv4dEvdXoDtw5AbWM57GhOHUkAh1WWApOuQA1FxP7Ab6SBfXsEj33QP5uKOum8b1g84TPggG23BxLuEbAyoe01N6ySBnyj9uQCTRTcjpX9tCNl4zYNkbaxwJea05R6yUfS6oMGyj6m2nKIYV_8aIDwXFRBTP_dDoik-icEpJVh2xhb5f-kF_dBWZt6oje3_jEHEUxV6Q2klbXEFzGdNBUjIW-_gLrMw310TTk4II1gLhYA3fGdvAKKeSu3QI2hUL3I_d6YkKqLRPI2f7NKg3SepUIFxXTjZvFTh54OOHAIXQyR3LWhu9-ono25ZHCZl7IekrqC2CnrqdXmCMGFpb0WOgKLL-QvzjsyHaofK6Nb286JLeb1ISsPZdwfHpMj1mpySxlf9OXLC5-wU1uOcNBqS9qguYHZb6swj2VMzF6dY1xizZdCiU-o-aLDF6n7TufNgh_NroElc1FfPe5tY_5YVHGefR6Kkx_mSFhUX8Cd9lXkSTVUKePsq5ygt1DcQwIuu6zKeuXU1RAkjUE0Nm0faXryBUI8Q7Kc8ZHIN1ghkJVJfmN4L9S4liU7nCVZBRylZ3wQbv3EV2UgJDCv8lHZhWX3e_7G-qp6LN6wDgRAMiKpJnVjah-YtgZsmhwtUs4nYKhL1fOyd8lWfgaIxzqHr23elP04kqSA0Ykw6Sn2rAQW0DP72U-EltZ_-1kGsl9Jp3XhgJ-k1eURcanrzxmms7N5kCn3IUXZBSE24xZxJ0tvRYBuEt9_49c92e4cutcNrwHM1k6alqcBHPI5hXy7pV23ayEczEiTXekzrkg79Hi94F--K6wmd1dSKlFzDnvh-_34I53ufnwVUdhIWN6eaM3H5Rqdq7xBvvkwyQ81lpUcheDoZHdGMhV7uzoxwkawjPTdg4l2GMoCE18lEnHH5r8nGjxCN3U4y9ibqxApIFjAOStXinPE6CQNjz__5V7g8wfTDJYpeVcuT0tflS2Ar5ROFmjuaP48aCd6qxpsGYYhOs6jQwuLDU2DdO8Y4d3CW3IkLapqB332lx8cdrQFCxz0Leo8UNAqCOd0ulVF1t0sjgP-FeL_EZhTcV)
 ---
 
-# 🧭 Diagramas de Comportamiento
 
-Cada flujo cuenta con su diagrama de secuencia (`DS`) y su diagrama de actividades (`AD`) equivalente:
-
-* Iniciar Sesión
-* Registrar Caso
-* Asignar Abogado
-* Subir Documento
-* Generar Reporte
-* Actualizar Estado del Caso
-* Programar Audiencia
-* Realizar Videollamada
-
-**Diagramas de estado** — ciclo de vida de las entidades principales: Caso Legal, Audiencia, Documento, Cita, Mensaje, Reporte.
-
----
 
 # 🧩 Patrones de Diseño Aplicados
 
