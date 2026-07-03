@@ -1,0 +1,565 @@
+@startuml IURIS_DiagramaClases
+
+skinparam classAttributeIconSize 0
+skinparam classFontSize 13
+skinparam classFontStyle bold
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam linetype ortho
+skinparam padding 3
+skinparam wrapWidth 180
+skinparam maxMessageSize 180
+
+skinparam class {
+  BorderColor #495057
+  FontColor #212529
+  AttributeFontColor #495057
+  AttributeFontSize 11
+}
+
+skinparam package {
+  FontSize 15
+  FontStyle bold
+  BorderColor #495057
+  FontColor #212529
+}
+
+skinparam note {
+  BackgroundColor #FFF9DB
+  BorderColor #E9C46A
+}
+
+title Diagrama de Clases — Sistema IURIS (Modelo de Dominio)
+
+package "Enumeraciones" #ECEFF1 {
+  enum EstadoCaso {
+    ACTIVO
+    EN_AUDIENCIA
+    EN_ESPERA
+    CERRADO
+    ARCHIVADO
+  }
+
+  enum EstadoPago {
+    PENDIENTE
+    PAGADO
+    VENCIDO
+    ANULADO
+    EN_PROCESO
+  }
+
+  enum EstadoCita {
+    PROGRAMADA
+    CONFIRMADA
+    EN_CURSO
+    COMPLETADA
+    CANCELADA
+    REPROGRAMADA
+  }
+
+  enum EstadoAudiencia {
+    PROGRAMADA
+    EN_CURSO
+    SUSPENDIDA
+    CONCLUIDA
+    CANCELADA
+  }
+
+  enum EstadoDocumento {
+    BORRADOR
+    PUBLICADO
+    FIRMADO
+    ARCHIVADO
+    ELIMINADO
+  }
+
+  enum TipoDocumento {
+    DEMANDA
+    CONTRATO
+    RESOLUCION
+    PRUEBA
+    ESCRITO
+    OTRO
+  }
+
+  enum TipoActuacion {
+    PRESENTACION
+    AUDIENCIA
+    NOTIFICACION
+    RECURSO
+    DILIGENCIA
+    RESOLUCION
+  }
+
+  enum TipoNotificacion {
+    CASO
+    CITA
+    PAGO
+    DOCUMENTO
+    AUDIENCIA
+    SISTEMA
+  }
+
+  enum TipoMensaje {
+    TEXTO
+    DOCUMENTO
+    IMAGEN
+    SISTEMA
+  }
+
+  enum RolUsuario {
+    CLIENTE
+    ABOGADO
+    ADMINISTRADOR
+  }
+}
+
+package "Usuarios y Seguridad" #E3F2FD {
+
+  abstract class Usuario {
+    - id: Long
+    - uuid: String
+    - nombres: String
+    - apellidos: String
+    - email: String
+    - passwordHash: String
+    - telefono: String
+    - fotoUrl: String
+    - activo: Boolean
+    - emailVerificado: Boolean
+    - rol: RolUsuario
+    - fechaCreacion: LocalDateTime
+    - fechaActualizacion: LocalDateTime
+    - ultimoAcceso: LocalDateTime
+    --
+    + autenticar(email: String, password: String): Boolean
+    + cambiarPassword(actual: String, nueva: String): void
+    + actualizarPerfil(datos: Map): void
+    + solicitarRecuperacion(): void
+    + verificarEmail(token: String): Boolean
+  }
+
+  class Cliente {
+    - dni: String
+    - direccion: String
+    - fechaNacimiento: LocalDate
+    - ocupacion: String
+    - empresa: String
+    --
+    + solicitarConsulta(descripcion: String): Caso
+    + verMisCasos(): List
+    + agendarCita(fecha: LocalDateTime, abogadoId: Long): Cita
+    + realizarPago(monto: BigDecimal, casoId: Long): Pago
+    + verHistorialPagos(): List
+  }
+
+  class Abogado {
+    - numeroColegiatura: String
+    - especialidades: List
+    - añosExperiencia: Integer
+    - bio: String
+    - disponible: Boolean
+    - tarifaHora: BigDecimal
+    --
+    + crearExpediente(casoId: Long): Expediente
+    + actualizarEstadoCaso(casoId: Long, estado: EstadoCaso): void
+    + registrarActuacion(expedienteId: Long, datos: Map): ActuacionProcesal
+    + registrarResolucion(expedienteId: Long, datos: Map): Resolucion
+    + cerrarCaso(casoId: Long, observaciones: String): void
+    + gestionarAudiencia(audienciaId: Long): void
+  }
+
+  class Administrador {
+    - nivelAcceso: Integer
+    - departamento: String
+    --
+    + gestionarUsuarios(): List
+    + gestionarRoles(): void
+    + generarReporte(tipo: String, fechaInicio: LocalDate, fechaFin: LocalDate): byte[]
+    + generarEstadisticas(): Map
+    + configurarSistema(clave: String, valor: String): void
+    + auditarAccesosDocumentos(): List
+    + gestionarSedes(): List
+  }
+
+  class Rol {
+    - id: Long
+    - nombre: String
+    - descripcion: String
+    - activo: Boolean
+    --
+    + asignarPermiso(permisoId: Long): void
+    + revocarPermiso(permisoId: Long): void
+    + getPermisos(): List
+  }
+
+  class Permiso {
+    - id: Long
+    - nombre: String
+    - descripcion: String
+    - modulo: String
+    - accion: String
+  }
+
+  class ConfiguracionSistema {
+    - id: Long
+    - clave: String
+    - valor: String
+    - descripcion: String
+    - tipo: String
+    - fechaActualizacion: LocalDateTime
+    - actualizadoPor: String
+  }
+
+  Usuario <|-- Cliente
+  Usuario <|-- Abogado
+  Usuario <|-- Administrador
+  Usuario "N" -- "N" Rol : tiene >
+  Rol "N" -- "N" Permiso : incluye >
+}
+
+package "Gestión Legal" #E8F5E9 {
+
+  class Caso {
+    - id: Long
+    - numeroCaso: String
+    - titulo: String
+    - descripcion: String
+    - estado: EstadoCaso
+    - fechaApertura: LocalDate
+    - fechaCierre: LocalDate
+    - fechaEstimadaCierre: LocalDate
+    - prioridad: Integer
+    - observaciones: String
+    - montoReclamado: BigDecimal
+    - fechaCreacion: LocalDateTime
+    - fechaActualizacion: LocalDateTime
+    --
+    + abrir(): void
+    + cerrar(observaciones: String): void
+    + actualizarEstado(estado: EstadoCaso): void
+    + calcularCostoTotal(): BigDecimal
+    + getDiasTranscurridos(): Integer
+    + generarResumen(): String
+  }
+
+  class Expediente {
+    - id: Long
+    - numeroExpediente: String
+    - juzgado: String
+    - instancia: String
+    - materiaLegal: String
+    - fechaInicio: LocalDate
+    - observaciones: String
+    - fechaCreacion: LocalDateTime
+    --
+    + agregarActuacion(actuacion: ActuacionProcesal): void
+    + agregarResolucion(resolucion: Resolucion): void
+    + getUltimaActuacion(): ActuacionProcesal
+    + generarTimeline(): List
+  }
+
+  class ActuacionProcesal {
+    - id: Long
+    - tipo: TipoActuacion
+    - descripcion: String
+    - fechaActuacion: LocalDate
+    - fechaRegistro: LocalDateTime
+    - resultado: String
+    - observaciones: String
+    - registradoPor: String
+    --
+    + registrar(): void
+    + editar(datos: Map): void
+  }
+
+  class Resolucion {
+    - id: Long
+    - numeroResolucion: String
+    - tipo: String
+    - descripcion: String
+    - fechaEmision: LocalDate
+    - fechaNotificacion: LocalDate
+    - contenido: String
+    - plazoApelacion: Integer
+    - apelada: Boolean
+    --
+    + notificar(): void
+    + apelar(): void
+  }
+
+  class EspecialidadLegal {
+    - id: Long
+    - nombre: String
+    - descripcion: String
+    - activa: Boolean
+  }
+
+  Caso "1" *-- "0..1" Expediente : contiene >
+  Expediente "1" *-- "0..*" ActuacionProcesal : registra >
+  Expediente "1" *-- "0..*" Resolucion : contiene >
+  Caso "0..*" -- "0..*" EspecialidadLegal : categorizado por >
+  Abogado "0..*" -- "0..*" EspecialidadLegal : posee >
+}
+
+package "Documentos" #FFF3E0 {
+
+  class Documento {
+    - id: Long
+    - nombre: String
+    - descripcion: String
+    - tipo: TipoDocumento
+    - estado: EstadoDocumento
+    - urlAlmacenamiento: String
+    - nombreArchivo: String
+    - tamanioBytes: Long
+    - mimeType: String
+    - hashIntegridad: String
+    - version: Integer
+    - fechaSubida: LocalDateTime
+    - subidoPor: String
+    - publico: Boolean
+    --
+    + subir(archivo: MultipartFile): void
+    + descargar(): byte[]
+    + cambiarEstado(estado: EstadoDocumento): void
+    + generarUrlDescarga(): String
+    + verificarIntegridad(): Boolean
+  }
+
+  class AccesoDocumento {
+    - id: Long
+    - tipoAcceso: String
+    - fechaAcceso: LocalDateTime
+    - ipAddress: String
+    - userAgent: String
+    - exitoso: Boolean
+    - motivoAcceso: String
+  }
+
+  Documento "1" *-- "0..*" AccesoDocumento : registra >
+}
+
+package "Citas y Audiencias" #F3E5F5 {
+
+  class Cita {
+    - id: Long
+    - fechaHora: LocalDateTime
+    - duracionMinutos: Integer
+    - modalidad: String
+    - estado: EstadoCita
+    - descripcion: String
+    - enlaceVideoconferencia: String
+    - observaciones: String
+    - motivoCancelacion: String
+    - fechaCreacion: LocalDateTime
+    --
+    + confirmar(): void
+    + reprogramar(nuevaFecha: LocalDateTime): void
+    + cancelar(motivo: String): void
+    + iniciar(): void
+    + finalizar(): void
+    + generarEnlaceVideo(): String
+  }
+
+  class Audiencia {
+    - id: Long
+    - numeroAudiencia: String
+    - tipo: String
+    - fechaHora: LocalDateTime
+    - duracionEstimada: Integer
+    - duracionReal: Integer
+    - estado: EstadoAudiencia
+    - sala: String
+    - acta: String
+    - resultado: String
+    - observaciones: String
+    --
+    + iniciar(): void
+    + suspender(motivo: String): void
+    + concluir(resultado: String): void
+    + generarActa(): String
+  }
+
+  class Sede {
+    - id: Long
+    - nombre: String
+    - direccion: String
+    - ciudad: String
+    - telefono: String
+    - email: String
+    - capacidad: Integer
+    - activa: Boolean
+  }
+
+  Cita "1" --> "0..1" Audiencia : genera >
+  Sede "1" --> "0..*" Audiencia : aloja >
+}
+
+package "Pagos" #FCE4EC {
+
+  class Pago {
+    - id: Long
+    - numeroPago: String
+    - monto: BigDecimal
+    - moneda: String
+    - estado: EstadoPago
+    - concepto: String
+    - metodoPago: String
+    - fechaVencimiento: LocalDate
+    - fechaPago: LocalDateTime
+    - codigoTransaccion: String
+    - comprobante: String
+    - observaciones: String
+    - fechaCreacion: LocalDateTime
+    --
+    + procesar(): Boolean
+    + anular(motivo: String): void
+    + generarComprobante(): byte[]
+    + verificarPago(): Boolean
+    + calcularMora(): BigDecimal
+  }
+}
+
+package "Comunicación" #E0F7FA {
+
+  class Conversacion {
+    - id: Long
+    - asunto: String
+    - activa: Boolean
+    - fechaCreacion: LocalDateTime
+    - fechaUltimoMensaje: LocalDateTime
+    --
+    + enviarMensaje(contenido: String, tipo: TipoMensaje): Mensaje
+    + archivar(): void
+    + getMensajesNoLeidos(usuarioId: Long): List
+  }
+
+  class Mensaje {
+    - id: Long
+    - contenido: String
+    - tipo: TipoMensaje
+    - leido: Boolean
+    - fechaLectura: LocalDateTime
+    - archivado: Boolean
+    - editado: Boolean
+    - fechaCreacion: LocalDateTime
+    --
+    + marcarLeido(): void
+    + editar(nuevoContenido: String): void
+    + eliminar(): void
+  }
+
+  class Videollamada {
+    - id: Long
+    - codigoSala: String
+    - fechaInicio: LocalDateTime
+    - fechaFin: LocalDateTime
+    - duracionMinutos: Integer
+    - estado: String
+    - grabada: Boolean
+    - urlGrabacion: String
+    - plataforma: String
+    --
+    + iniciar(): String
+    + finalizar(): void
+    + grabar(): void
+    + invitar(usuarioId: Long): void
+  }
+
+  class Notificacion {
+    - id: Long
+    - titulo: String
+    - mensaje: String
+    - tipo: TipoNotificacion
+    - leida: Boolean
+    - fechaLectura: LocalDateTime
+    - urlAccion: String
+    - datos: String
+    - fechaCreacion: LocalDateTime
+    --
+    + marcarLeida(): void
+    + enviar(): void
+    + programar(fecha: LocalDateTime): void
+  }
+
+  Conversacion "0..*" -- "0..*" Usuario : participa >
+  Conversacion "1" *-- "0..*" Mensaje : contiene >
+}
+
+package "Auditoría" #EFEBE9 {
+
+  class Auditoria {
+    - id: Long
+    - entidad: String
+    - entidadId: Long
+    - accion: String
+    - datosAnteriores: String
+    - datosNuevos: String
+    - usuarioId: Long
+    - usuarioEmail: String
+    - ipAddress: String
+    - userAgent: String
+    - fechaHora: LocalDateTime
+    - exitoso: Boolean
+    - mensaje: String
+    --
+    + registrar(): void
+    + buscarPorEntidad(entidad: String, id: Long): List
+    + buscarPorUsuario(usuarioId: Long): List
+  }
+
+  Auditoria "0..*" -- "1" Usuario : registra >
+}
+
+Cliente "1" --> "0..*" Caso : solicita >
+Abogado "1" --> "0..*" Caso : gestiona >
+
+Caso "1" --> "0..*" Documento : posee >
+Usuario "1" --> "0..*" Documento : sube >
+Usuario "1" --> "0..*" AccesoDocumento : genera >
+
+Cliente "1" --> "0..*" Cita : agenda >
+Abogado "1" --> "0..*" Cita : atiende >
+Caso "1" --> "0..*" Cita : asociada a >
+Caso "1" --> "0..*" Audiencia : tiene >
+
+Cliente "1" --> "0..*" Pago : realiza >
+Caso "1" --> "0..*" Pago : genera >
+
+Usuario "1" --> "0..*" Mensaje : envía >
+Usuario "1" --> "0..*" Videollamada : inicia >
+Caso "1" --> "0..*" Conversacion : tiene >
+Usuario "1" --> "0..*" Notificacion : recibe >
+
+note top of Usuario
+  Clase abstracta base.
+  Herencia de tabla única (SINGLE_TABLE)
+  discriminador: campo "rol"
+end note
+
+note right of Caso
+  Entidad central del sistema.
+  numeroCaso: autogenerado (año + secuencia)
+  ej: IURIS-2025-00001
+end note
+
+note bottom of Auditoria
+  Registra TODAS las operaciones
+  CRUD del sistema para trazabilidad
+  y cumplimiento regulatorio.
+end note
+
+legend right
+  |= Color |= Módulo |
+  |<#E3F2FD>| Usuarios y Seguridad |
+  |<#E8F5E9>| Gestión Legal |
+  |<#FFF3E0>| Documentos |
+  |<#F3E5F5>| Citas y Audiencias |
+  |<#FCE4EC>| Pagos |
+  |<#E0F7FA>| Comunicación |
+  |<#EFEBE9>| Auditoría |
+  |<#ECEFF1>| Enumeraciones |
+endlegend
+
+@enduml

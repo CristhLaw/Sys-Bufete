@@ -1,18 +1,22 @@
-# IURIS — Sistema de Gestión para Bufete de Abogados
+# ⚖️ IURIS — Sistema de Gestión para Bufete de Abogados
 
-Proyecto académico del curso **Análisis y Diseño de Sistemas** (Universidad Peruana Unión — UPeU, Juliaca).
+Sistema de gestión jurídica diseñado para centralizar la administración integral de un mini bufete de abogados: usuarios y roles, casos legales, agenda y audiencias, documentos, comunicación con clientes y reportes ejecutivos.
 
-IURIS centraliza la gestión integral de un mini bufete de abogados: usuarios y roles, casos legales, agenda y audiencias, documentos, comunicación con clientes y reportes ejecutivos del bufete.
+Proyecto académico del curso **Análisis y Diseño de Sistemas** — Universidad Peruana Unión (UPeU), Juliaca.
 
-## Arquitectura
+---
 
-El sistema se implementa como una **aplicación monolítica organizada en capas** (`controller → service → repository → model`), en un único artefacto **Spring Boot** desplegado como proceso único, con una **única base de datos PostgreSQL** compartida por todos los módulos funcionales.
+## 📋 Descripción
 
-Los dominios funcionales (Autenticación, Usuarios, Casos Legales, Agenda y Audiencias, Documentos, Comunicación, Reportes) se organizan como módulos internos dentro de las mismas capas compartidas, en lugar de servicios independientes. Como proyecto de referencia arquitectónica se toma `San_Martin_Backend-ImportaExportarRepuestosDesdeExcel`, del cual se adoptan el patrón CRUD genérico, la seguridad JWT y el manejo centralizado de excepciones.
+IURIS permite gestionar de manera eficiente la información jurídica y administrativa del bufete, facilitando el seguimiento de casos, la organización de documentos legales, el control de audiencias y la comunicación entre abogados, clientes y personal administrativo.
+
+El sistema se implementa como una **aplicación monolítica organizada en capas** (`controller → service → repository → model`), en un único artefacto **Spring Boot** desplegado como proceso único, con una **única base de datos PostgreSQL** compartida por todos los módulos funcionales. Como proyecto de referencia arquitectónica se toma `San_Martin_Backend`, del cual se adoptan el patrón CRUD genérico, la seguridad JWT y el manejo centralizado de excepciones.
 
 > El detalle de esta decisión, las alternativas evaluadas (microservicios, monolito modular por dominio, arquitectura hexagonal) y sus consecuencias están documentados en [`ADR-001`](./4-Desicion%20arquitectonico%20(ADRs)/ADR-001-arquitectura-monolitica-por-capas.md).
 
-### Stack tecnológico
+---
+
+## 🛠️ Tecnologías Utilizadas
 
 | Capa | Tecnología |
 |---|---|
@@ -22,14 +26,34 @@ Los dominios funcionales (Autenticación, Usuarios, Casos Legales, Agenda y Audi
 | Base de datos | PostgreSQL |
 | Almacenamiento de documentos | Cloudinary |
 | Videollamadas | WebRTC |
+| Modelado | PlantUML, Draw.io, Arquitectura C4, UML |
+| Control de versiones | Git & GitHub |
 
-### Actores del sistema
+---
 
-Cliente · Abogado Principal · Abogado Asistente · Secretaria · Administrador · Gerente/Socio
+## 🏗️ Arquitectura y Modelado
 
-## Estructura del repositorio
+### Modelo C4
 
-```
+| Nivel | Contenido |
+|---|---|
+| **Nivel 1 — Contexto** | Actores, Sistema IURIS y sistemas externos (Cloudinary, WebRTC) |
+| **Nivel 2 — Contenedores** | App Web (Angular), App Móvil (Flutter), Backend IURIS (Spring Boot monolítico), PostgreSQL |
+| **Nivel 3 — Componentes** | Controllers, Services, Repositories, Entidades, DTOs/Mappers, Seguridad (JWT), Configuración |
+
+### UML
+
+* Casos de Uso (general + por módulo)
+* Diagrama de Clases (modelo de dominio completo)
+* Diagramas de Secuencia
+* Diagramas de Actividades
+* Diagramas de Estado
+
+---
+
+## 📂 Estructura del Proyecto
+
+```text
 Sys-Bufete/
 ├── 1-MODELO_C4/                     Modelo C4 del sistema (Niveles 1-3)
 │   ├── Nivel_1_Contexto/            Actores, sistema y servicios externos
@@ -55,32 +79,85 @@ Sys-Bufete/
 └── pom.xml                          Configuración Maven
 ```
 
-## Modelo C4
+---
 
-| Nivel | Contenido |
-|---|---|
-| **Nivel 1 — Contexto** | Actores, Sistema IURIS y sistemas externos (Cloudinary, WebRTC) |
-| **Nivel 2 — Contenedores** | App Web (Angular), App Móvil (Flutter), Backend IURIS (Spring Boot monolítico), PostgreSQL |
-| **Nivel 3 — Componentes** | Controllers, Services, Repositories, Entidades, DTOs/Mappers, Seguridad (JWT), Configuración |
+# 👥 Actores del Sistema
 
-## Modelo UML
+## Cliente
+* Consultar información de sus casos.
+* Revisar documentos autorizados.
+* Consultar audiencias programadas.
+* Comunicarse con su abogado asignado.
 
-**Casos de uso** — organizados en un diagrama general (`CU00`) y cuatro diagramas por módulo funcional:
+## Abogado Principal
+* Gestionar casos legales.
+* Asignar abogados asistentes.
+* Registrar audiencias y actuaciones procesales.
+* Generar reportes de casos.
+
+## Abogado Asistente
+* Dar seguimiento a expedientes asignados.
+* Administrar documentos jurídicos.
+* Actualizar el estado de casos.
+
+## Secretaria
+* Programar y reprogramar audiencias y citas.
+* Gestionar la agenda del bufete.
+* Apoyar en la organización documental.
+
+## Administrador
+* Gestionar usuarios y roles.
+* Gestionar permisos de acceso.
+* Supervisar el funcionamiento general del sistema.
+
+## Gerente / Socio
+* Consultar reportes ejecutivos del bufete.
+* Supervisar el desempeño general de los casos.
+
+---
+
+# 📌 Casos de Uso
+
+Organizados en un diagrama general (`CU00`) y cuatro diagramas por módulo funcional:
 
 | Módulo | Alcance |
 |---|---|
-| M1 — Autenticación y Perfil | Iniciar/cerrar sesión, recuperar y restablecer contraseña |
-| M2 — Casos y Reportes | Solicitar consulta, registrar caso, asignar abogado, actualizar/cerrar caso, reportes |
-| M3 — Documentos y Comunicación | Subir/consultar/descargar documento, mensajería, videollamada |
-| M4 — Agenda y Audiencias | Registrar audiencia, programar/reprogramar/cancelar cita |
+| **M1 — Autenticación y Perfil** | Iniciar/cerrar sesión, recuperar y restablecer contraseña |
+| **M2 — Casos y Reportes** | Solicitar consulta, registrar caso, asignar abogado, actualizar/cerrar caso, reportes |
+| **M3 — Documentos y Comunicación** | Subir/consultar/descargar documento, mensajería, videollamada |
+| **M4 — Agenda y Audiencias** | Registrar audiencia, programar/reprogramar/cancelar cita |
+# 📌 Casos de Uso
 
-**Diagramas de comportamiento** — cada flujo cuenta con su diagrama de secuencia (`DS`) y su diagrama de actividades (`AD`) equivalente: Iniciar Sesión, Registrar Caso, Asignar Abogado, Subir Documento, Generar Reporte, Actualizar Estado del Caso, Programar Audiencia, Realizar Videollamada.
+## Diagrama General
+
+![Diagrama General](https://www.plantuml.com/plantuml/png/VPRDZjis4CVlUeh1NfeSqjhojv4kid62OWy15Z4MFJFKhCA68WsI2kAsUPW-G0z5RxtwnJe3YTO7bUp1Yvdv3Vdd33_qoWVXGbtfJEDJW631gV9ZW48vb45Pa_bFofo44nMSXFmaIZo6iqRWi32bnXvGUvJ28_oH0Rmck7IsDiN1QklWruyg8FkjAz0rljUQeEnhbWaPo7pqjN3AjjP1ApG1M-lkWor54MCthGaFJXcfJaBVWF0HkZh7z9rNFl2WVVhgREaZIeU1X8WuTL4fGumZsCKXVq77EV0J7ArKbWU4rfTbhNHuyUBFs-kgnkAQQ5pNMCnaT3XW9tJe7-WTXgBgWJExjX9kZZnz9U3-yVtzyOOQcK5iEvMnPcbA2gak_neummEw9wNXsRlvSsO1uBe5RWwFipdS6oMLSE3HSmfN2JYGe3cyHrcVq14ihGcE0fT_H4p8nmdv5Wxet7XeyXFvTQWwbgEHJMfdaseN9A5aJZYeczB4wHS9l8Htjb1FIgRmCe5Nj3CydoM2dTNe8xfAbjL7Jy9T_gemE1iJyZHXtKz0LodVqUk4ti316b_hGBIe2nMik_mj8hz9QdSGD1oSgJ8dwm9wAbu-MRnrhtYosVrnaUi4tiJYfV0cWRVzaKbE9BS9kUFpNN8XH7DS8heRe_CPtCbG2wr-9vhgHp0KgBi9c4covd7FzR5vKkISMcAGETUKZORcbAunwNPU93bFoWWZ5JeRinP9rXBUVc6wIuliCcdb6olhYahD_OI3hMgZvFL4BAQQEb_3iVwW71GnDQvvdQ2zZPNYcmJVmXlqKhXo2jyc-0xUci-AMEAy-0qZcJGsdz5kyITh2Xp154hWES7j7lYi2hHQYqeK8YRCqwkaH5C8gjzTNIYaxWW-4Sl9ukMzVIiY7eNd2Rw01sTB9oh2fGfNSf6GIpwDa-moOLTm44QY7e4hNXc_kp_0p_m7mvjz3z9Mb_yC20Ysi1wqzV6Myqr6rZuUz98q5_h0fbkOd3dyU0iSX3syV8bVQ8hYzhQRTF1EjSCEVEtWYqdlSjAxclBcqzxrf7VJ2UmUs7syf_ZmY6OND88xfbMmJbsRn4LjvNvnWTWO5eWRD8YafKi-V_PGeW_SlEjbqw1JdntDzVcDm6uwm1ST_xJ2Pi322D1rWLFAddNfv-wxw_aUF9QrgXHPTgYmdMOsilEHlHxPcv6zpVYdbRdvbip11RYFtvfmZlfRQT4VfnhQsv6z6zhvV2HjDxJpqLA9PsShVJVT-lWKVx-zUTvzwatQupCLlVJJxiey7mheHKQxyXNzgolzFm00)
+---
+
+
+# 📊 Diagrama de Clases
+
+Modelo de dominio completo con las entidades `Cliente`, `Abogado`, `Administrador`, `Caso`, `Expediente`, `Audiencia`, `Cita`, `Documento`, `Resolución`, `ActuaciónProcesal`, `Pago`, `Mensaje`, `Conversación`, `Notificación`, `Videollamada`, `Rol`, `Permiso`, `Sede`, `EspecialidadLegal`, `AccesoDocumento`, `Auditoría`, `ConfiguraciónSistema`, junto con sus enumeraciones asociadas (`EstadoCaso`, `EstadoCita`, `EstadoDocumento`, `EstadoAudiencia`, `EstadoPago`, `RolUsuario`, `TipoDocumento`, `TipoMensaje`, `TipoNotificacion`, `TipoActuacion`).
+
+---
+
+# 🧭 Diagramas de Comportamiento
+
+Cada flujo cuenta con su diagrama de secuencia (`DS`) y su diagrama de actividades (`AD`) equivalente:
+
+* Iniciar Sesión
+* Registrar Caso
+* Asignar Abogado
+* Subir Documento
+* Generar Reporte
+* Actualizar Estado del Caso
+* Programar Audiencia
+* Realizar Videollamada
 
 **Diagramas de estado** — ciclo de vida de las entidades principales: Caso Legal, Audiencia, Documento, Cita, Mensaje, Reporte.
 
-**Diagrama de clases** — modelo de dominio completo con las entidades `Cliente`, `Abogado`, `Administrador`, `Caso`, `Expediente`, `Audiencia`, `Cita`, `Documento`, `Resolución`, `ActuaciónProcesal`, `Pago`, `Mensaje`, `Conversación`, `Notificación`, `Videollamada`, `Rol`, `Permiso`, `Sede`, `EspecialidadLegal`, `AccesoDocumento`, `Auditoría`, `ConfiguraciónSistema`, junto con sus enumeraciones asociadas (`EstadoCaso`, `EstadoCita`, `EstadoDocumento`, `EstadoAudiencia`, `EstadoPago`, `RolUsuario`, `TipoDocumento`, `TipoMensaje`, `TipoNotificacion`, `TipoActuacion`).
+---
 
-## Patrones de diseño aplicados
+# 🧩 Patrones de Diseño Aplicados
 
 | Patrón | Categoría | Uso en IURIS |
 |---|---|---|
@@ -89,18 +166,56 @@ Sys-Bufete/
 | **Singleton** | Creacional | Instancia única de recursos compartidos del sistema |
 | **Adapter** | Estructural | Integración con el proveedor externo de almacenamiento (`CloudinaryAdapter`) |
 
-## Decisiones de arquitectura (ADRs)
+---
+
+# 🗂️ Decisiones de Arquitectura (ADRs)
 
 | ADR | Título | Estado |
 |---|---|---|
-| [ADR-001](./4-Desicion%20arquitectonico%20(ADRs)/ADR-001-arquitectura-monolitica-por-capas.md) | Adopción de arquitectura monolítica por capas | Aceptado |
+| [ADR-001](./4-Desicion%20arquitectonico%20(ADRs)/ADR-001-arquitectura-monolitica-por-capas.md) | Adopción de arquitectura monolítica por capas | ✅ Aceptado |
 
-## Estado actual del proyecto
+---
 
-El repositorio contiene actualmente el **modelado y la documentación completa** del sistema (C4, UML, patrones de diseño, ADR). El código fuente en `src/` corresponde aún a un scaffold inicial de Maven/IntelliJ, pendiente de implementación siguiendo la arquitectura documentada.
+# 🎯 Objetivos del Sistema
 
-## Requisitos
+* Centralizar la información jurídica del bufete.
+* Optimizar la gestión de expedientes y casos legales.
+* Reducir errores administrativos.
+* Mejorar el seguimiento y control de audiencias.
+* Facilitar la comunicación entre abogados y clientes.
+* Garantizar la seguridad y confidencialidad de la información.
 
-- Java 17
-- Maven
-- PostgreSQL
+---
+
+# 🚀 Estado del Proyecto
+
+📌 Fase actual: **Modelado y Documentación completa**
+
+* [x] Contexto del sistema
+* [x] Identificación de actores
+* [x] Casos de uso
+* [x] Modelo C4 (Niveles 1-3)
+* [x] Diagrama de clases (modelo de dominio)
+* [x] Diagramas de secuencia y actividades
+* [x] Diagramas de estado
+* [x] Patrones de diseño
+* [x] ADR de arquitectura
+* [ ] Implementación backend
+* [ ] Implementación frontend
+* [ ] Pruebas del sistema
+
+> El código fuente en `src/` corresponde aún a un scaffold inicial de Maven, pendiente de implementación siguiendo la arquitectura documentada.
+
+---
+
+## 📦 Requisitos
+
+* Java 17
+* Maven
+* PostgreSQL
+
+---
+
+# 👨‍💻 Equipo de Desarrollo
+
+Proyecto académico de Ingeniería de Sistemas — UPeU
